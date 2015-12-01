@@ -29,13 +29,33 @@ class Matrix:
 
 
 
-    #def determinant(self):
-            #FIXME
+    def determinant(self):
+        if self.strock!=self.stolbcov:
+            raise RuntimeError
+        if self.strock==1:
+            return self.value[0][0]
+        if self.strock==2:
+            return self.value[0][0]*self.value[1][1]-self.value[0][1]*self.value[1][0]
+        detect=0
+        for i in range(self.stolbcov):
+            k=0
+            value=[[0]*(self.stolbcov-1) for i in range(self.strock-1)]
+            for j in range(self.stolbcov):
+                if j==i:
+                    pass
+                else:
+                    value[k]=self.transpose().value[j][1:]
+                    k+=1
+            value=Matrix(value)
+            detect+=pow(-1,i)*value.determinant()*self.value[0][i]
+        return detect
+
 
 
 
     def __eq__(self, other):
         if self.stolbcov!=other.stolbcov or self.strock!=other.strock:
+            print(self.value,self.strock,self.stolbcov,other.value,other.strock,other.stolbcov)
             raise RuntimeError()
         else:
             for i in range(self.strock):
@@ -76,7 +96,7 @@ class Matrix:
             b=[[0]*self.stolbcov for i in range(self.strock)]
             for i in range(self.strock):
                 for j in range(self.stolbcov):
-                    print(self.value[i][j],type(self.value[i][j]),other,type(other))
+                    #print(self.value[i][j],type(self.value[i][j]),other,type(other))
                     b[i][j]=self.value[i][j]*other
             return Matrix(b)
         if self.stolbcov!=other.strock:
@@ -112,8 +132,14 @@ class Matrix:
 
 
 
-    #def transpose(self):
-        #FIXME
+    def transpose(self):
+        b=[[0]*self.strock for i in range(self.stolbcov)]
+        for i in range(self.stolbcov):
+            for j in range(self.strock):
+                b[i][j]=self.value[j][i]
+        b=Matrix(b)
+        return b
+
 
 
 
@@ -128,8 +154,3 @@ class Matrix:
                     print(self.value[i][j],type(self.value[i][j]),other,type(other))
                     b[i][j]=self.value[i][j]/other
             return Matrix(b)
-
-
-
-
-
