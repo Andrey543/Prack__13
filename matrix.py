@@ -96,18 +96,19 @@ class Matrix:
             b=[[0]*self.stolbcov for i in range(self.strock)]
             for i in range(self.strock):
                 for j in range(self.stolbcov):
-                    #print(self.value[i][j],type(self.value[i][j]),other,type(other))
                     b[i][j]=self.value[i][j]*other
             return Matrix(b)
         if self.stolbcov!=other.strock:
             raise RuntimeError
         else:
-            b=[[0]*self.strock for i in range(self.stolbcov)]
+            b=[[0]*other.stolbcov for i in range(self.strock)]
             for i in range(self.strock):
                 for j in range(other.stolbcov):
                     for k in range(self.stolbcov):
-                        b[i][j]+=self.value[i][k]+other.value[k][j]
-            return Matrix(b)
+                        b[i][j]+=self.value[i][k]*other.value[k][j]
+                        print(b[i][j],self.value[i][k],other.value[k][j])
+            b=Matrix(b)
+            return b
 
 
 
@@ -151,6 +152,5 @@ class Matrix:
             b=[[0]*self.stolbcov for i in range(self.strock)]
             for i in range(self.strock):
                 for j in range(self.stolbcov):
-                    print(self.value[i][j],type(self.value[i][j]),other,type(other))
                     b[i][j]=self.value[i][j]/other
             return Matrix(b)
